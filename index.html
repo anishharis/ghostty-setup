@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghostty Setup Cheatsheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   Catppuccin Mocha Palette
+   ============================================ */
+:root {
+  --crust: #11111b;
+  --mantle: #181825;
+  --base: #1e1e2e;
+  --surface0: #313244;
+  --surface1: #45475a;
+  --surface2: #585b70;
+  --overlay0: #6c7086;
+  --overlay1: #7f849c;
+  --overlay2: #9399b2;
+  --subtext0: #a6adc8;
+  --subtext1: #bac2de;
+  --text: #cdd6f4;
+  --lavender: #b4befe;
+  --blue: #89b4fa;
+  --sapphire: #74c7ec;
+  --sky: #89dceb;
+  --teal: #94e2d5;
+  --green: #a6e3a1;
+  --yellow: #f9e2af;
+  --peach: #fab387;
+  --maroon: #eba0ac;
+  --red: #f38ba8;
+  --mauve: #cba6f7;
+  --pink: #f5c2e7;
+  --flamingo: #f2cdcd;
+  --rosewater: #f5e0dc;
+}
+
+/* ============================================
+   Reset & Base
+   ============================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--base);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+::selection {
+  background: var(--mauve);
+  color: var(--crust);
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--mantle); }
+::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--overlay0); }
+
+/* ============================================
+   Layout
+   ============================================ */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ============================================
+   Hero
+   ============================================ */
+.hero {
+  padding: 60px 0 40px;
+  text-align: center;
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(203, 166, 247, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: var(--surface0);
+  border: 1px solid var(--surface1);
+  color: var(--mauve);
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  margin-bottom: 20px;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+
+.hero h1 span {
+  background: linear-gradient(135deg, var(--mauve), var(--blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  color: var(--subtext0);
+  font-size: 0.95rem;
+  max-width: 540px;
+  margin: 0 auto 28px;
+}
+
+.install-cmd {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--mantle);
+  border: 1px solid var(--surface0);
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.install-cmd:hover {
+  border-color: var(--surface2);
+  box-shadow: 0 0 0 3px rgba(203, 166, 247, 0.1);
+}
+
+.install-cmd .prompt {
+  color: var(--green);
+  user-select: none;
+}
+
+.install-cmd code {
+  color: var(--text);
+}
+
+.install-cmd .copy-icon {
+  color: var(--overlay1);
+  transition: color 0.2s;
+  flex-shrink: 0;
+}
+
+.install-cmd:hover .copy-icon {
+  color: var(--mauve);
+}
+
+/* ============================================
+   Search
+   ============================================ */
+.search-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--base);
+  padding: 16px 0;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.search-wrap.scrolled {
+  border-color: var(--surface0);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.search-bar {
+  position: relative;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.search-bar svg {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--overlay0);
+  pointer-events: none;
+}
+
+.search-bar input {
+  width: 100%;
+  background: var(--mantle);
+  border: 1px solid var(--surface0);
+  border-radius: 10px;
+  padding: 12px 16px 12px 42px;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-bar input::placeholder {
+  color: var(--overlay0);
+}
+
+.search-bar input:focus {
+  border-color: var(--mauve);
+  box-shadow: 0 0 0 3px rgba(203, 166, 247, 0.15);
+}
+
+.search-count {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--overlay0);
+  font-size: 0.75rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.search-count.visible { opacity: 1; }
+
+/* ============================================
+   Tabs
+   ============================================ */
+.tabs-wrap {
+  padding: 12px 0 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.tabs-wrap::-webkit-scrollbar { display: none; }
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  min-width: max-content;
+  padding-bottom: 4px;
+}
+
+.tab {
+  background: none;
+  border: 1px solid var(--surface0);
+  border-radius: 8px;
+  padding: 7px 14px;
+  color: var(--subtext0);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.tab:hover {
+  color: var(--text);
+  border-color: var(--surface1);
+  background: var(--surface0);
+}
+
+.tab.active {
+  background: var(--mauve);
+  color: var(--crust);
+  border-color: var(--mauve);
+}
+
+/* ============================================
+   Cards Grid
+   ============================================ */
+.sections { padding: 24px 0 60px; }
+
+.section {
+  margin-bottom: 36px;
+  animation: fadeUp 0.3s ease;
+}
+
+.section.hidden { display: none; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.section-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.section-header h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.section-header .section-desc {
+  color: var(--overlay1);
+  font-size: 0.78rem;
+  margin-left: auto;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 12px;
+}
+
+/* ============================================
+   Shortcut Cards
+   ============================================ */
+.card {
+  background: var(--mantle);
+  border: 1px solid var(--surface0);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+
+.card:hover {
+  border-color: var(--surface1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card.highlight {
+  border-color: var(--mauve);
+  box-shadow: 0 0 0 2px rgba(203, 166, 247, 0.15);
+}
+
+.card.hidden { display: none; }
+
+.card-keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+kbd {
+  display: inline-block;
+  background: var(--surface0);
+  border: 1px solid var(--surface1);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  padding: 3px 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.key-sep {
+  color: var(--overlay0);
+  font-size: 0.7rem;
+  padding: 0 1px;
+}
+
+.card-action {
+  color: var(--subtext1);
+  font-size: 0.82rem;
+  text-align: right;
+  line-height: 1.4;
+}
+
+/* ============================================
+   Command Cards
+   ============================================ */
+.cmd-card {
+  background: var(--mantle);
+  border: 1px solid var(--surface0);
+  border-radius: 10px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+  position: relative;
+}
+
+.cmd-card:hover {
+  border-color: var(--surface1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.cmd-card.hidden { display: none; }
+
+.cmd-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.cmd-card-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.cmd-card .copy-btn {
+  background: var(--surface0);
+  border: 1px solid var(--surface1);
+  border-radius: 6px;
+  padding: 4px 8px;
+  color: var(--overlay1);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cmd-card .copy-btn:hover {
+  background: var(--surface1);
+  color: var(--text);
+}
+
+.cmd-card .copy-btn.copied {
+  background: var(--green);
+  color: var(--crust);
+  border-color: var(--green);
+}
+
+.cmd-card pre {
+  background: var(--base);
+  border-radius: 6px;
+  padding: 10px 12px;
+  overflow-x: auto;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--text);
+  scrollbar-width: thin;
+}
+
+.cmd-card pre::-webkit-scrollbar { height: 4px; }
+.cmd-card pre::-webkit-scrollbar-thumb { background: var(--surface1); border-radius: 2px; }
+
+.cmd-card .cmd-desc {
+  color: var(--overlay1);
+  font-size: 0.75rem;
+  margin-top: 8px;
+}
+
+/* ============================================
+   Config Cards
+   ============================================ */
+.config-card {
+  background: var(--mantle);
+  border: 1px solid var(--surface0);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.config-card:hover {
+  border-color: var(--surface1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.config-card.hidden { display: none; }
+
+.config-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--surface0);
+}
+
+.config-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.config-card-path {
+  font-size: 0.72rem;
+  color: var(--overlay0);
+}
+
+.config-card pre {
+  padding: 14px 16px;
+  overflow-x: auto;
+  font-size: 0.76rem;
+  line-height: 1.6;
+  color: var(--subtext1);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Syntax colors inside config pre */
+.config-card pre .cm { color: var(--overlay0); }
+.config-card pre .key { color: var(--blue); }
+.config-card pre .val { color: var(--green); }
+.config-card pre .str { color: var(--yellow); }
+
+/* ============================================
+   Plugin Cards
+   ============================================ */
+.plugin-card {
+  background: var(--mantle);
+  border: 1px solid var(--surface0);
+  border-radius: 10px;
+  padding: 16px;
+  transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+
+.plugin-card:hover {
+  border-color: var(--surface1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.plugin-card.hidden { display: none; }
+
+.plugin-card-name {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.plugin-card-desc {
+  color: var(--overlay1);
+  font-size: 0.78rem;
+  margin-bottom: 10px;
+}
+
+.plugin-card code {
+  display: block;
+  background: var(--base);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 0.75rem;
+  color: var(--subtext0);
+  overflow-x: auto;
+}
+
+/* ============================================
+   Toast
+   ============================================ */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--green);
+  color: var(--crust);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+footer {
+  border-top: 1px solid var(--surface0);
+  padding: 24px 0;
+  text-align: center;
+  color: var(--overlay0);
+  font-size: 0.78rem;
+}
+
+footer a {
+  color: var(--mauve);
+  text-decoration: none;
+}
+
+footer a:hover { text-decoration: underline; }
+
+/* ============================================
+   No Results
+   ============================================ */
+.no-results {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--overlay0);
+  display: none;
+}
+
+.no-results.show { display: block; }
+
+.no-results .nr-icon {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+/* ============================================
+   Section icon colors
+   ============================================ */
+.icon-ghostty { background: rgba(203, 166, 247, 0.15); color: var(--mauve); }
+.icon-lazygit { background: rgba(166, 227, 161, 0.15); color: var(--green); }
+.icon-yazi { background: rgba(250, 179, 135, 0.15); color: var(--peach); }
+.icon-fzf { background: rgba(137, 180, 250, 0.15); color: var(--blue); }
+.icon-zoxide { background: rgba(148, 226, 213, 0.15); color: var(--teal); }
+.icon-ripgrep { background: rgba(249, 226, 175, 0.15); color: var(--yellow); }
+.icon-delta { background: rgba(245, 194, 231, 0.15); color: var(--pink); }
+.icon-btop { background: rgba(235, 160, 172, 0.15); color: var(--maroon); }
+.icon-dust { background: rgba(180, 190, 254, 0.15); color: var(--lavender); }
+.icon-plugins { background: rgba(116, 199, 236, 0.15); color: var(--sapphire); }
+.icon-config { background: rgba(137, 220, 235, 0.15); color: var(--sky); }
+.icon-install { background: rgba(166, 227, 161, 0.15); color: var(--green); }
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 768px) {
+  .hero { padding: 40px 0 28px; }
+  .card-grid { grid-template-columns: 1fr; }
+  .section-header .section-desc { display: none; }
+  .card { padding: 12px 14px; }
+  .install-cmd { font-size: 0.78rem; padding: 8px 12px; }
+}
+
+@media (max-width: 480px) {
+  .hero h1 { font-size: 1.8rem; }
+  .container { padding: 0 14px; }
+  .tabs { gap: 4px; }
+  .tab { padding: 6px 10px; font-size: 0.72rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">macOS Terminal Setup</div>
+    <h1><span>Ghostty</span> Setup</h1>
+    <p class="hero-sub">Terminal, shell plugins, CLI tools, and config &mdash; all in one interactive cheatsheet.</p>
+    <div class="install-cmd" onclick="copyText('git clone https://github.com/anishharis/ghostty-setup.git && cd ghostty-setup && bash setup.sh')" title="Click to copy">
+      <span class="prompt">$</span>
+      <code>git clone https://github.com/anishharis/ghostty-setup.git && cd ghostty-setup && bash setup.sh</code>
+      <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+    </div>
+  </div>
+</section>
+
+<!-- Search + Tabs -->
+<div class="search-wrap" id="searchWrap">
+  <div class="container">
+    <div class="search-bar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Search shortcuts, commands, tools..." autocomplete="off" spellcheck="false">
+      <span class="search-count" id="searchCount"></span>
+    </div>
+    <div class="tabs-wrap">
+      <div class="tabs" id="tabs">
+        <button class="tab active" data-tab="all">All</button>
+        <button class="tab" data-tab="ghostty">Ghostty</button>
+        <button class="tab" data-tab="lazygit">lazygit</button>
+        <button class="tab" data-tab="yazi">yazi</button>
+        <button class="tab" data-tab="fzf">fzf</button>
+        <button class="tab" data-tab="zoxide">zoxide</button>
+        <button class="tab" data-tab="ripgrep">ripgrep</button>
+        <button class="tab" data-tab="delta">delta</button>
+        <button class="tab" data-tab="btop-dust">btop / dust</button>
+        <button class="tab" data-tab="plugins">Shell Plugins</button>
+        <button class="tab" data-tab="config">Config</button>
+        <button class="tab" data-tab="install">Install</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Content -->
+<div class="container">
+  <div class="sections" id="sections">
+
+    <!-- ===================== Ghostty Shortcuts ===================== -->
+    <div class="section" data-category="ghostty">
+      <div class="section-header">
+        <div class="section-icon icon-ghostty">&#9776;</div>
+        <h2>Ghostty Shortcuts</h2>
+        <span class="section-desc">Terminal navigation & window management</span>
+      </div>
+      <div class="card-grid">
+        <div class="card" data-search="ctrl backtick quick terminal toggle global">
+          <div class="card-keys"><kbd>Ctrl</kbd><span class="key-sep">+</span><kbd>`</kbd></div>
+          <div class="card-action">Quick terminal (global)</div>
+        </div>
+        <div class="card" data-search="cmd t new tab">
+          <div class="card-keys"><kbd>Cmd</kbd><span class="key-sep">+</span><kbd>T</kbd></div>
+          <div class="card-action">New tab</div>
+        </div>
+        <div class="card" data-search="cmd shift bracket next prev previous tab">
+          <div class="card-keys"><kbd>Cmd</kbd><span class="key-sep">+</span><kbd>Shift</kbd><span class="key-sep">+</span><kbd>]</kbd> <kbd>[</kbd></div>
+          <div class="card-action">Next / prev tab</div>
+        </div>
+        <div class="card" data-search="cmd number jump tab switch">
+          <div class="card-keys"><kbd>Cmd</kbd><span class="key-sep">+</span><kbd>1-9</kbd></div>
+          <div class="card-action">Jump to tab</div>
+        </div>
+        <div class="card" data-search="cmd d split right vertical">
+          <div class="card-keys"><kbd>Cmd</kbd><span class="key-sep">+</span><kbd>D</kbd></div>
+          <div class="card-action">Split right</div>
+        </div>
+        <div class="card" data-search="cmd shift d split down horizontal">
+          <div class="card-keys"><kbd>Cmd</kbd><span class="key-sep">+</span><kbd>Shift</kbd><span class="key-sep">+</span><kbd>D</kbd></div>
+          <div class="card-action">Split down</div>
+        </div>
+        <div class="card" data-search="cmd option arrows navigate splits panes move focus">
+          <div class="card-keys"><kbd>Cmd</kbd><span class="key-sep">+</span><kbd>Opt</kbd><span class="key-sep">+</span><kbd>Arrows</kbd></div>
+          <div class="card-action">Navigate splits</div>
+        </div>
+        <div class="card" data-search="cmd shift enter zoom unzoom fullscreen split pane">
+          <div class="card-keys"><kbd>Cmd</kbd><span class="key-sep">+</span><kbd>Shift</kbd><span class="key-sep">+</span><kbd>Enter</kbd></div>
+          <div class="card-action">Zoom / unzoom split</div>
+        </div>
+        <div class="card" data-search="cmd shift p command palette">
+          <div class="card-keys"><kbd>Cmd</kbd><span class="key-sep">+</span><kbd>Shift</kbd><span class="key-sep">+</span><kbd>P</kbd></div>
+          <div class="card-action">Command palette</div>
+        </div>
+        <div class="card" data-search="option click cursor move position">
+          <div class="card-keys"><kbd>Opt</kbd><span class="key-sep">+</span><kbd>Click</kbd></div>
+          <div class="card-action">Move cursor on command line</div>
+        </div>
+        <div class="card" data-search="cmd click open link url">
+          <div class="card-keys"><kbd>Cmd</kbd><span class="key-sep">+</span><kbd>Click</kbd></div>
+          <div class="card-action">Open link</div>
+        </div>
+        <div class="card" data-search="option enter newline without execute multiline">
+          <div class="card-keys"><kbd>Opt</kbd><span class="key-sep">+</span><kbd>Enter</kbd></div>
+          <div class="card-action">Newline without execute</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== lazygit ===================== -->
+    <div class="section" data-category="lazygit">
+      <div class="section-header">
+        <div class="section-icon icon-lazygit">&#9656;</div>
+        <h2>lazygit</h2>
+        <span class="section-desc">Terminal git UI</span>
+      </div>
+      <div class="card-grid">
+        <div class="card" data-search="space stage unstage file lazygit">
+          <div class="card-keys"><kbd>Space</kbd></div>
+          <div class="card-action">Stage / unstage</div>
+        </div>
+        <div class="card" data-search="c commit lazygit">
+          <div class="card-keys"><kbd>c</kbd></div>
+          <div class="card-action">Commit</div>
+        </div>
+        <div class="card" data-search="p push P pull lazygit">
+          <div class="card-keys"><kbd>p</kbd> / <kbd>P</kbd></div>
+          <div class="card-action">Push / Pull</div>
+        </div>
+        <div class="card" data-search="bracket switch panels lazygit navigate">
+          <div class="card-keys"><kbd>[</kbd> / <kbd>]</kbd></div>
+          <div class="card-action">Switch panels</div>
+        </div>
+        <div class="card" data-search="question mark help lazygit">
+          <div class="card-keys"><kbd>?</kbd></div>
+          <div class="card-action">Help</div>
+        </div>
+        <div class="card" data-search="q quit exit lazygit">
+          <div class="card-keys"><kbd>q</kbd></div>
+          <div class="card-action">Quit</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== yazi ===================== -->
+    <div class="section" data-category="yazi">
+      <div class="section-header">
+        <div class="section-icon icon-yazi">&#128193;</div>
+        <h2>yazi</h2>
+        <span class="section-desc">Terminal file manager</span>
+      </div>
+      <div class="card-grid">
+        <div class="card" data-search="enter open directory yazi">
+          <div class="card-keys"><kbd>Enter</kbd></div>
+          <div class="card-action">Open / enter directory</div>
+        </div>
+        <div class="card" data-search="space select yazi">
+          <div class="card-keys"><kbd>Space</kbd></div>
+          <div class="card-action">Select</div>
+        </div>
+        <div class="card" data-search="y copy yazi">
+          <div class="card-keys"><kbd>y</kbd></div>
+          <div class="card-action">Copy</div>
+        </div>
+        <div class="card" data-search="x cut yazi">
+          <div class="card-keys"><kbd>x</kbd></div>
+          <div class="card-action">Cut</div>
+        </div>
+        <div class="card" data-search="p paste yazi">
+          <div class="card-keys"><kbd>p</kbd></div>
+          <div class="card-action">Paste</div>
+        </div>
+        <div class="card" data-search="d delete yazi">
+          <div class="card-keys"><kbd>d</kbd></div>
+          <div class="card-action">Delete</div>
+        </div>
+        <div class="card" data-search="r rename yazi">
+          <div class="card-keys"><kbd>r</kbd></div>
+          <div class="card-action">Rename</div>
+        </div>
+        <div class="card" data-search="q quit exit yazi">
+          <div class="card-keys"><kbd>q</kbd></div>
+          <div class="card-action">Quit</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== fzf ===================== -->
+    <div class="section" data-category="fzf">
+      <div class="section-header">
+        <div class="section-icon icon-fzf">&#128269;</div>
+        <h2>fzf</h2>
+        <span class="section-desc">Fuzzy finder</span>
+      </div>
+      <div class="card-grid">
+        <div class="card" data-search="ctrl r fuzzy search history fzf">
+          <div class="card-keys"><kbd>Ctrl</kbd><span class="key-sep">+</span><kbd>R</kbd></div>
+          <div class="card-action">Fuzzy search history</div>
+        </div>
+        <div class="card" data-search="ctrl t fuzzy search files fzf">
+          <div class="card-keys"><kbd>Ctrl</kbd><span class="key-sep">+</span><kbd>T</kbd></div>
+          <div class="card-action">Fuzzy search files</div>
+        </div>
+        <div class="card" data-search="option alt c fuzzy cd directory fzf">
+          <div class="card-keys"><kbd>Opt</kbd><span class="key-sep">+</span><kbd>C</kbd></div>
+          <div class="card-action">Fuzzy cd</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== zoxide ===================== -->
+    <div class="section" data-category="zoxide">
+      <div class="section-header">
+        <div class="section-icon icon-zoxide">&#128640;</div>
+        <h2>zoxide</h2>
+        <span class="section-desc">Smart cd — remembers directories you visit</span>
+      </div>
+      <div class="card-grid">
+        <div class="card" data-search="z name jump best match directory zoxide cd">
+          <div class="card-keys"><kbd>z</kbd> <kbd>name</kbd></div>
+          <div class="card-action">Jump to best match</div>
+        </div>
+        <div class="card" data-search="zi interactive picker fzf zoxide">
+          <div class="card-keys"><kbd>zi</kbd></div>
+          <div class="card-action">Interactive picker (fzf)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== ripgrep ===================== -->
+    <div class="section" data-category="ripgrep">
+      <div class="section-header">
+        <div class="section-icon icon-ripgrep">&#128270;</div>
+        <h2>ripgrep</h2>
+        <span class="section-desc">Fast code search</span>
+      </div>
+      <div class="card-grid">
+        <div class="card" data-search="rg search all files ripgrep pattern">
+          <div class="card-keys"><kbd>rg</kbd> <kbd>"pattern"</kbd></div>
+          <div class="card-action">Search all files</div>
+        </div>
+        <div class="card" data-search="rg type filter file type js ripgrep">
+          <div class="card-keys"><kbd>rg</kbd> <kbd>"fn"</kbd> <kbd>-t js</kbd></div>
+          <div class="card-action">Filter by file type</div>
+        </div>
+        <div class="card" data-search="rg case insensitive ignore ripgrep">
+          <div class="card-keys"><kbd>rg</kbd> <kbd>"error"</kbd> <kbd>-i</kbd></div>
+          <div class="card-action">Case-insensitive search</div>
+        </div>
+        <div class="card" data-search="rg directory path folder scope ripgrep">
+          <div class="card-keys"><kbd>rg</kbd> <kbd>"import"</kbd> <kbd>src/</kbd></div>
+          <div class="card-action">Search in directory</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== delta ===================== -->
+    <div class="section" data-category="delta">
+      <div class="section-header">
+        <div class="section-icon icon-delta">&#916;</div>
+        <h2>delta</h2>
+        <span class="section-desc">Better git diffs &mdash; automatically active</span>
+      </div>
+      <div class="card-grid">
+        <div class="card" data-search="n N navigate files delta next previous">
+          <div class="card-keys"><kbd>n</kbd> / <kbd>N</kbd></div>
+          <div class="card-action">Navigate between files</div>
+        </div>
+        <div class="cmd-card" data-search="delta config setup git pager side-by-side">
+          <div class="cmd-card-header">
+            <span class="cmd-card-title">delta configuration</span>
+            <button class="copy-btn" onclick="copyBlock(this)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              copy
+            </button>
+          </div>
+          <pre>git config --global core.pager delta
+git config --global interactive.diffFilter "delta --color-only"
+git config --global delta.navigate true
+git config --global delta.side-by-side true
+git config --global merge.conflictstyle diff3
+git config --global diff.colorMoved default</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== btop / dust ===================== -->
+    <div class="section" data-category="btop-dust">
+      <div class="section-header">
+        <div class="section-icon icon-btop">&#128200;</div>
+        <h2>btop / dust</h2>
+        <span class="section-desc">System monitoring & disk usage</span>
+      </div>
+      <div class="card-grid">
+        <div class="card" data-search="btop system monitor cpu memory disk network">
+          <div class="card-keys"><kbd>btop</kbd></div>
+          <div class="card-action">System monitor (CPU, RAM, disk, net)</div>
+        </div>
+        <div class="card" data-search="dust disk usage space visual bar chart">
+          <div class="card-keys"><kbd>dust</kbd></div>
+          <div class="card-action">Visual disk usage breakdown</div>
+        </div>
+        <div class="card" data-search="q quit exit btop">
+          <div class="card-keys"><kbd>q</kbd></div>
+          <div class="card-action">Quit btop</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== Shell Plugins ===================== -->
+    <div class="section" data-category="plugins">
+      <div class="section-header">
+        <div class="section-icon icon-plugins">&#9881;</div>
+        <h2>Shell Plugins</h2>
+        <span class="section-desc">zsh enhancements</span>
+      </div>
+      <div class="card-grid">
+        <div class="plugin-card" data-search="autosuggestions history inline zsh plugin">
+          <div class="plugin-card-name">zsh-autosuggestions</div>
+          <div class="plugin-card-desc">Inline history suggestions as you type. Press <kbd>&#8594;</kbd> to accept.</div>
+          <code>source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh</code>
+        </div>
+        <div class="plugin-card" data-search="autocomplete dropdown tab completions zsh plugin">
+          <div class="plugin-card-name">zsh-autocomplete</div>
+          <div class="plugin-card-desc">Dropdown tab completions. Must be sourced near the top of .zshrc.</div>
+          <code>source /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh</code>
+        </div>
+        <div class="plugin-card" data-search="syntax highlighting colors commands zsh plugin">
+          <div class="plugin-card-name">zsh-syntax-highlighting</div>
+          <div class="plugin-card-desc">Colors commands as you type. Must be sourced last in .zshrc.</div>
+          <code>source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh</code>
+        </div>
+        <div class="plugin-card" data-search="you should use alias reminder zsh plugin">
+          <div class="plugin-card-name">zsh-you-should-use</div>
+          <div class="plugin-card-desc">Reminds you about aliases you've set up but aren't using.</div>
+          <code>source /opt/homebrew/share/zsh-you-should-use/you-should-use.plugin.zsh</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== Config ===================== -->
+    <div class="section" data-category="config">
+      <div class="section-header">
+        <div class="section-icon icon-config">&#128196;</div>
+        <h2>Config Files</h2>
+        <span class="section-desc">Copy these to the right paths</span>
+      </div>
+      <div class="card-grid">
+        <div class="config-card" data-search="ghostty config font theme opacity blur padding keybind quick terminal catppuccin">
+          <div class="config-card-header">
+            <span class="config-card-title">Ghostty config</span>
+            <span class="config-card-path">~/Library/Application Support/com.mitchellh.ghostty/config</span>
+            <button class="copy-btn" onclick="copyBlock(this)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              copy
+            </button>
+          </div>
+          <pre><span class="cm"># Font</span>
+<span class="key">font-family</span> = <span class="val">JetBrainsMono Nerd Font</span>
+
+<span class="cm"># Theme — auto switches with macOS light/dark mode</span>
+<span class="key">theme</span> = <span class="val">light:Catppuccin Latte,dark:Catppuccin Mocha</span>
+
+<span class="cm"># Window</span>
+<span class="key">background-opacity</span> = <span class="val">0.9</span>
+<span class="key">background-blur-radius</span> = <span class="val">20</span>
+<span class="key">window-padding-x</span> = <span class="val">10</span>
+<span class="key">window-padding-y</span> = <span class="val">8</span>
+
+<span class="cm"># Mouse</span>
+<span class="key">mouse-hide-while-typing</span> = <span class="val">true</span>
+
+<span class="cm"># Quick terminal (Ctrl+` from anywhere)</span>
+<span class="key">quick-terminal-position</span> = <span class="val">top</span>
+<span class="key">quick-terminal-animation-duration</span> = <span class="val">0.15</span>
+<span class="key">keybind</span> = <span class="val">global:ctrl+grave_accent=toggle_quick_terminal</span>
+
+<span class="cm"># Shell integration</span>
+<span class="key">shell-integration-features</span> = <span class="val">cursor,sudo,title</span></pre>
+        </div>
+
+        <div class="config-card" data-search="zshrc shell additions plugins aliases eza bat zoxide starship source">
+          <div class="config-card-header">
+            <span class="config-card-title">.zshrc additions</span>
+            <span class="config-card-path">~/.zshrc</span>
+            <button class="copy-btn" onclick="copyBlock(this)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              copy
+            </button>
+          </div>
+          <pre><span class="cm"># Near the top (before compdef calls)</span>
+<span class="key">source</span> <span class="str">/opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh</span>
+
+<span class="cm"># After other setup</span>
+<span class="key">source</span> <span class="str">/opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh</span>
+<span class="key">source</span> <span class="str">/opt/homebrew/share/zsh-you-should-use/you-should-use.plugin.zsh</span>
+<span class="key">eval</span> <span class="str">"$(zoxide init zsh)"</span>
+<span class="key">eval</span> <span class="str">"$(starship init zsh)"</span>
+
+<span class="cm"># Aliases</span>
+<span class="key">alias</span> ls=<span class="str">"eza --icons"</span>
+<span class="key">alias</span> ll=<span class="str">"eza --icons -la"</span>
+<span class="key">alias</span> lt=<span class="str">"eza --icons --tree --level=2"</span>
+<span class="key">alias</span> cat=<span class="str">"bat"</span>
+
+<span class="cm"># Must be last</span>
+<span class="key">source</span> <span class="str">/opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== Install ===================== -->
+    <div class="section" data-category="install">
+      <div class="section-header">
+        <div class="section-icon icon-install">&#128229;</div>
+        <h2>Install</h2>
+        <span class="section-desc">All brew install commands</span>
+      </div>
+      <div class="card-grid">
+        <div class="cmd-card" data-search="install ghostty terminal cask brew">
+          <div class="cmd-card-header">
+            <span class="cmd-card-title">Ghostty</span>
+            <button class="copy-btn" onclick="copyBlock(this)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              copy
+            </button>
+          </div>
+          <pre>brew install --cask ghostty</pre>
+        </div>
+
+        <div class="cmd-card" data-search="install font jetbrains mono nerd brew cask">
+          <div class="cmd-card-header">
+            <span class="cmd-card-title">Nerd Font</span>
+            <button class="copy-btn" onclick="copyBlock(this)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              copy
+            </button>
+          </div>
+          <pre>brew install --cask font-jetbrains-mono-nerd-font</pre>
+        </div>
+
+        <div class="cmd-card" data-search="install shell plugins autosuggestions autocomplete syntax highlighting you-should-use brew">
+          <div class="cmd-card-header">
+            <span class="cmd-card-title">Shell Plugins</span>
+            <button class="copy-btn" onclick="copyBlock(this)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              copy
+            </button>
+          </div>
+          <pre>brew install zsh-autosuggestions
+brew install zsh-autocomplete
+brew install zsh-syntax-highlighting
+brew install zsh-you-should-use</pre>
+        </div>
+
+        <div class="cmd-card" data-search="install starship prompt brew">
+          <div class="cmd-card-header">
+            <span class="cmd-card-title">Prompt</span>
+            <button class="copy-btn" onclick="copyBlock(this)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              copy
+            </button>
+          </div>
+          <pre>brew install starship
+starship preset nerd-font-symbols -o ~/.config/starship.toml</pre>
+        </div>
+
+        <div class="cmd-card" data-search="install tools lazygit yazi eza bat fzf zoxide btop dust ripgrep delta brew">
+          <div class="cmd-card-header">
+            <span class="cmd-card-title">CLI Tools</span>
+            <button class="copy-btn" onclick="copyBlock(this)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              copy
+            </button>
+          </div>
+          <pre>brew install lazygit yazi eza bat fzf zoxide btop dust ripgrep git-delta</pre>
+        </div>
+
+        <div class="cmd-card" data-search="install delta git config pager side-by-side navigate">
+          <div class="cmd-card-header">
+            <span class="cmd-card-title">Git Delta Config</span>
+            <button class="copy-btn" onclick="copyBlock(this)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              copy
+            </button>
+          </div>
+          <pre>git config --global core.pager delta
+git config --global interactive.diffFilter "delta --color-only"
+git config --global delta.navigate true
+git config --global delta.side-by-side true
+git config --global merge.conflictstyle diff3
+git config --global diff.colorMoved default</pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- No results -->
+  <div class="no-results" id="noResults">
+    <div class="nr-icon">:/</div>
+    <div>No matches found. Try a different search term.</div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">Copied!</div>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    Built for <a href="https://github.com/anishharis/ghostty-setup" target="_blank" rel="noopener">ghostty-setup</a>
+  </div>
+</footer>
+
+<script>
+/* ============================================
+   Search + Filter
+   ============================================ */
+const searchInput = document.getElementById('searchInput');
+const searchCount = document.getElementById('searchCount');
+const searchWrap = document.getElementById('searchWrap');
+const sections = document.querySelectorAll('.section');
+const noResults = document.getElementById('noResults');
+const tabs = document.querySelectorAll('.tab');
+
+let activeTab = 'all';
+
+// Sticky scroll effect
+window.addEventListener('scroll', () => {
+  searchWrap.classList.toggle('scrolled', window.scrollY > 120);
+}, { passive: true });
+
+// Tab click
+document.getElementById('tabs').addEventListener('click', (e) => {
+  const tab = e.target.closest('.tab');
+  if (!tab) return;
+
+  tabs.forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  activeTab = tab.dataset.tab;
+
+  // Clear search when switching tabs
+  searchInput.value = '';
+  searchCount.classList.remove('visible');
+
+  filterAll();
+});
+
+// Search input
+searchInput.addEventListener('input', () => {
+  filterAll();
+});
+
+function filterAll() {
+  const q = searchInput.value.toLowerCase().trim();
+  let totalVisible = 0;
+
+  sections.forEach(section => {
+    const cat = section.dataset.category;
+    const tabMatch = activeTab === 'all' || cat === activeTab;
+
+    if (!tabMatch) {
+      section.classList.add('hidden');
+      return;
+    }
+
+    section.classList.remove('hidden');
+
+    // Filter individual cards within visible sections
+    const cards = section.querySelectorAll('.card, .cmd-card, .config-card, .plugin-card');
+    let sectionVisible = 0;
+
+    cards.forEach(card => {
+      if (!q) {
+        card.classList.remove('hidden');
+        sectionVisible++;
+        return;
+      }
+
+      const searchData = (card.dataset.search || '').toLowerCase();
+      const textContent = card.textContent.toLowerCase();
+      const match = searchData.includes(q) || textContent.includes(q);
+
+      card.classList.toggle('hidden', !match);
+      if (match) sectionVisible++;
+    });
+
+    // Hide section if no cards match
+    if (q && sectionVisible === 0) {
+      section.classList.add('hidden');
+    }
+
+    totalVisible += sectionVisible;
+  });
+
+  // Show count
+  if (q) {
+    searchCount.textContent = totalVisible + ' found';
+    searchCount.classList.add('visible');
+  } else {
+    searchCount.classList.remove('visible');
+  }
+
+  // No results
+  noResults.classList.toggle('show', q && totalVisible === 0);
+}
+
+/* ============================================
+   Click to Copy
+   ============================================ */
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => showToast('Copied!'));
+}
+
+function copyBlock(btn) {
+  const card = btn.closest('.cmd-card, .config-card');
+  const pre = card.querySelector('pre');
+  const text = pre.textContent;
+
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> copied!';
+    showToast('Copied!');
+
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> copy';
+    }, 2000);
+  });
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 1500);
+}
+
+/* ============================================
+   Keyboard shortcut: / to focus search
+   ============================================ */
+document.addEventListener('keydown', (e) => {
+  if (e.key === '/' && document.activeElement !== searchInput) {
+    e.preventDefault();
+    searchInput.focus();
+    searchInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  if (e.key === 'Escape' && document.activeElement === searchInput) {
+    searchInput.value = '';
+    searchInput.blur();
+    filterAll();
+  }
+});
+</script>
+</body>
+</html>

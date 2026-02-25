@@ -2,6 +2,8 @@
 
 Full terminal setup for macOS with Ghostty, shell plugins, and CLI tools.
 
+**[Interactive Cheatsheet](https://anishharis.github.io/ghostty-setup/)** — searchable shortcuts, commands, and config all in one page.
+
 ## What's Included
 
 **Terminal:** Ghostty with Catppuccin theme, blur, padding, quick terminal
