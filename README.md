@@ -61,6 +61,17 @@ cp claude-skill/SKILL.md ~/.claude/skills/ghostty-setup/SKILL.md
 
 Then type `/ghostty-setup` in Claude Code to run it. The skill references `~/ghostty-setup/setup.sh`, so clone this repo to your home directory.
 
+## Optional: cmux
+
+[cmux](https://www.cmux.dev/) is a Ghostty-based terminal with a vertical sidebar showing git branch, working directory, ports, and notification text per tab. Great for running multiple Claude Code sessions in parallel.
+
+```bash
+brew tap manaflow-ai/cmux
+brew install --cask cmux
+```
+
+It reads your Ghostty config automatically.
+
 ## Key Shortcuts
 
 | Shortcut | Action |
